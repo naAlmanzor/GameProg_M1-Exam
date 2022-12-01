@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
-    bool onJumpInput;
+    public bool onJumpInput;
     float onHorizontalInput;
     float onVerticalInput;
 
-
-    Rigidbody rb;
+    public Rigidbody rb;
+    
     [SerializeField]private GameObject onGround;
     // Start is called before the first frame update
     void Start()
