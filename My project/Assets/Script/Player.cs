@@ -7,11 +7,15 @@ public class Player : MonoBehaviour
     public bool onJumpInput;
     float onHorizontalInput;
     float onVerticalInput;
+    float movementSpeed = 3f;
+
+    Vector3 movementDirection;
+    public Transform playerObj;
 
     public Rigidbody rb;
-    
-    [SerializeField]private GameObject onGround;
-    // Start is called before the first frame update
+          
+    [SerializeField] GameObject onGround;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -26,19 +30,22 @@ public class Player : MonoBehaviour
 
         onHorizontalInput = Input.GetAxis("Horizontal");
         onVerticalInput = Input.GetAxis("Vertical");
+
+        movementDirection = new Vector3(onHorizontalInput, 0, onVerticalInput);
     }
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector3(onHorizontalInput, rb.velocity.y, onVerticalInput );
+        var direction = playerObj.rotation*movementDirection;
 
-        if (Physics.OverlapSphere(onGround.transform.position, 0.01f).Length == 0)        
+        rb.MovePosition(rb.position+direction*movementSpeed*Time.fixedDeltaTime);
+        if (Physics.OverlapSphere(onGround.transform.position, 0.01f).Length == 1)        
         {
             return;
         }
 
         if(onJumpInput==true){
-            rb.AddForce(Vector3.up*3f,ForceMode.VelocityChange);
+            rb.AddForce(Vector3.up*4f,ForceMode.VelocityChange);    
             onJumpInput = false;
         }
     }
@@ -52,6 +59,13 @@ public class Player : MonoBehaviour
     {
         if(other.gameObject.tag == "coin"){
             Debug.Log("Interacting with Coin.");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "pushBox"){
+            Debug.Log("Interacting with Box.");
         }
     }
 }
