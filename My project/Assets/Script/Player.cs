@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
+    [Header("Movement")]
+    float movementSpeed = 3f;
+
     public bool onJumpInput;
+    public float jumpCooldown;
+    bool readyToJump = true;
+
+    public Transform orientation;
+
     float onHorizontalInput;
     float onVerticalInput;
-    float movementSpeed = 3f;
 
     Vector3 movementDirection;
     public Transform playerObj;
@@ -19,40 +26,53 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)){
-            onJumpInput = true;
+        PlayerInput();   
+
+        if(Input.GetKeyDown(KeyCode.Space) && readyToJump){
+
+            readyToJump = false;
+            Jump();
+
+            Invoke(nameof(ReadyJump), jumpCooldown);
         }
+    }
 
+    
+    public void PlayerInput(){
         onHorizontalInput = Input.GetAxis("Horizontal");
-        onVerticalInput = Input.GetAxis("Vertical");
+        onVerticalInput = Input.GetAxis("Vertical");    
+    }
 
-        movementDirection = new Vector3(onHorizontalInput, 0, onVerticalInput);
+    private void PlayerMovement(){
+        movementDirection = orientation.forward * onVerticalInput + orientation.right * onHorizontalInput;  
+    }
+
+    private void Jump(){
+        onJumpInput = false;
+        rb.AddForce(Vector3.up*4f,ForceMode.VelocityChange);
+    }
+
+    private void ReadyJump(){
+        readyToJump = true;
     }
 
     void FixedUpdate()
     {
-        var direction = playerObj.rotation*movementDirection;
-
-        rb.MovePosition(rb.position+direction*movementSpeed*Time.fixedDeltaTime);
+        PlayerMovement();
+        rb.MovePosition(rb.position+movementDirection*movementSpeed*Time.fixedDeltaTime);
         if (Physics.OverlapSphere(onGround.transform.position, 0.01f).Length == 1)        
         {
             return;
         }
 
         if(onJumpInput==true){
-            rb.AddForce(Vector3.up*4f,ForceMode.VelocityChange);    
-            onJumpInput = false;
+            Jump();
         }
-    }
-
-    public void CreateClassMethod()
-    {
-        Debug.Log("You referenced a class!");
     }
 
     private void OnTriggerEnter(Collider other)
