@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
     {
         if(other.gameObject.tag == "coin"){
             Debug.Log("Interacting with Coin.");
+            Destroy(other.gameObject);
         }
     }
 

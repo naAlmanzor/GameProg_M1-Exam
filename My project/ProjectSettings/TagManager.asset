@@ -6,6 +6,7 @@ TagManager:
   tags:
   - coin
   - ground
+  - pushBox
   layers:
   - Default
   - TransparentFX
