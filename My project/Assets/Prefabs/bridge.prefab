@@ -111,8 +111,8 @@ GameObject:
   - component: {fileID: 684009985966161434}
   - component: {fileID: 5989322793461914193}
   m_Layer: 0
-  m_Name: Cube (1)
-  m_TagString: Untagged
+  m_Name: slopeRight
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,8 +208,8 @@ GameObject:
   - component: {fileID: 4234290547888885459}
   - component: {fileID: 8725124579337664747}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: slopeLeft
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 3321446891437588540}
   m_Layer: 0
   m_Name: bridge
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

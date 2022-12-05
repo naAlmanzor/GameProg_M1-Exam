@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public float jumpCooldown;
     bool readyToJump = true;
 
+    bool isGrounded=true;
+
     public Transform orientation;
 
     float onHorizontalInput;
@@ -18,7 +20,7 @@ public class Player : MonoBehaviour
 
     Vector3 movementDirection;
     public Transform playerObj;
-
+    
     public Rigidbody rb;
           
     [SerializeField] GameObject onGround;
@@ -30,15 +32,23 @@ public class Player : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
         PlayerInput();   
 
-        if(Input.GetKeyDown(KeyCode.Space) && readyToJump){
+        if(Input.GetKeyDown(KeyCode.Space) && readyToJump && isGrounded){
 
+            isGrounded = false;
             readyToJump = false;
+
             Jump();
 
             Invoke(nameof(ReadyJump), jumpCooldown);
+        }
+
+        if (Input.GetButtonUp("Horizontal") || Input.GetButtonUp("Vertical"))
+        {
+            rb.velocity = Vector3.zero;
+            Debug.Log("Released");
         }
     }
 
@@ -85,8 +95,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "pushBox"){
-            Debug.Log("Interacting with Box.");
+
+        if (collision.gameObject.tag == "ground")
+        {
+            isGrounded = true;
         }
     }
 }
